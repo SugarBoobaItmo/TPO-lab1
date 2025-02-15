@@ -75,6 +75,10 @@ public class RBtree {
     public void deleteNode(int data) {
         Node node = root;
 
+        if (node == null) {
+            throw new IllegalArgumentException("Cannot delete from an empty tree.");
+        }
+
         // find the node to delete
         while (node != null && node.data != data) {
             if (data < node.data) {

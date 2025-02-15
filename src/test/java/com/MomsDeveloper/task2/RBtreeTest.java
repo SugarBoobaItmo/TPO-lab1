@@ -25,6 +25,16 @@ public class RBtreeTest {
     }
 
     @Test
+    void testEmptyTree() {
+        assertNull(tree.searchNode(10));
+    }
+
+    @Test
+    void testDeleteFromEmptyTree() {
+        assertThrows(IllegalArgumentException.class, () -> tree.deleteNode(10));
+    }
+
+    @Test
     void testRedBlackPropertiesAfterInsertions() {
         tree.insertNode(10);
         tree.insertNode(20);
@@ -43,4 +53,12 @@ public class RBtreeTest {
         assertNotNull(tree.searchNode(25));
         assertNull(tree.searchNode(100));
     }
+
+    @Test
+    void testDuplicateInsertion() {
+        tree.insertNode(10);
+        assertThrows(IllegalArgumentException.class, () -> tree.insertNode(10));
+    }
+
+    
 }
