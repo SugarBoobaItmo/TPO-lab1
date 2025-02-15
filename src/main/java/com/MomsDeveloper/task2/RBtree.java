@@ -16,7 +16,6 @@ public class RBtree {
 
         public Node(int data) {
             this.data = data;
-            this.color = RED;
         }
     }
 
@@ -43,7 +42,6 @@ public class RBtree {
     }
 
     public void insertNode(int data) {
-        Node newNode = new Node(data);
         Node current = root;
         Node parent = null;
 
@@ -59,9 +57,13 @@ public class RBtree {
             }
         }
 
+        Node newNode = new Node(data);
+        newNode.color = RED;
+
         // Insert the new node
         if (parent == null) {
             root = newNode;
+            root.color = BLACK;
         } else if (data < parent.data) {
             parent.left = newNode;
         } else {
@@ -115,7 +117,10 @@ public class RBtree {
     }
 
     public boolean isValidRBTree() {
-        return checkRBProperties(root);
+        boolean checkColors = checkRBProperties(root);
+        boolean checkHeights = checkBlackHeight(root) != -1;
+
+        return checkColors && checkHeights;
     }
 
     // Fixup methods
@@ -135,7 +140,7 @@ public class RBtree {
             return;
         }
 
-        Node uncle = getUncle(node);
+        Node uncle = getUncle(parent);
 
         // Case 3
         if (uncle != null && uncle.color == RED) {
@@ -276,10 +281,8 @@ public class RBtree {
         return node;
     }
 
-    private Node getUncle(Node node) {
-        Node parent = node.parent;
+    private Node getUncle(Node parent) {
         Node grandparent = parent.parent;
-
         if (grandparent.left == parent) {
             return grandparent.right;
         } else if (grandparent.right == parent) {
@@ -359,5 +362,20 @@ public class RBtree {
         }
 
         return checkRBProperties(node.left) && checkRBProperties(node.right);
+    }
+
+    private int checkBlackHeight(Node node) {
+        if (node == null) {
+            return 0;
+        }
+
+        int leftHeight = checkBlackHeight(node.left);
+        int rightHeight = checkBlackHeight(node.right);
+
+        if (leftHeight == -1 || rightHeight == -1 || leftHeight != rightHeight) {
+            return -1;
+        }
+
+        return isBlack(node) ? leftHeight + 1 : leftHeight;
     }
 }
