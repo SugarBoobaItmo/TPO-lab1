@@ -110,6 +110,10 @@ public class RBtree {
         }
     }
 
+    public boolean isValidRBTree() {
+        return checkRBProperties(root);
+    }
+
     // Fixup methods
     private void insertFixup(Node node) {
         Node parent = node.parent;
@@ -296,6 +300,10 @@ public class RBtree {
         return node == null || node.color == BLACK;
     }
 
+    private boolean isRed(Node node) {
+        return node != null && node.color == RED;
+    }
+
     private void handleRedSibling(Node node, Node sibling) {
         // Recolor...
         sibling.color = BLACK;
@@ -335,5 +343,17 @@ public class RBtree {
             sibling.left.color = BLACK;
             rotateRight(node.parent);
         }
+    }
+
+    private boolean checkRBProperties(Node node) {
+        if (node == null) {
+            return true;
+        }
+
+        if (node.color == RED && (isRed(node.left) || isRed(node.right))) {
+            return false;
+        }
+
+        return checkRBProperties(node.left) && checkRBProperties(node.right);
     }
 }
