@@ -13,7 +13,7 @@ public class Human {
     protected Set<Characteristics> characteristics;
     protected Set<Human> knownPeople;
 
-    public Human(String name, Set<Characteristics> characteristics){
+    public Human(String name, Set<Characteristics> characteristics) {
         this.name = name;
         this.characteristics = characteristics;
         this.knownPeople = new HashSet<>();
@@ -31,19 +31,14 @@ public class Human {
         return false;
     }
 
-    public void randomEncounter(Human other) {
-        if (this.knownPeople.contains(other)) {
-            System.out.println(this.name + " уже знает " + other.name);
-            return;
-        }
-
+    public boolean randomEncounter(Human other) {
         Random random = new Random();
         if (random.nextBoolean()) {
             meet(other);
             other.meet(this);
-            System.out.println(this.name + " случайно встретил " + other.name + " и теперь они знакомы.");
+            return true;
         } else {
-            System.out.println(this.name + " и " + other.name + " разминулись.");
+            return false;
         }
     }
 
@@ -52,15 +47,17 @@ public class Human {
         Set<String> characteristicsDesc = new HashSet<>();
         for (Characteristics i : characteristics)
             characteristicsDesc.add(i.getDescription());
-        
+
         return name + " (характеристики: " + characteristicsDesc + ")";
 
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Human human = (Human) o;
         return Objects.equals(name, human.name);
     }

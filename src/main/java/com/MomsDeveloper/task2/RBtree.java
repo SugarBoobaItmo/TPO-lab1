@@ -5,6 +5,10 @@ public class RBtree {
     private static final boolean BLACK = false;
     private Node root;
 
+    protected void log(String message) {
+        System.out.println(message);
+    }
+
     static class Node {
         int data;
 
@@ -42,6 +46,7 @@ public class RBtree {
     }
 
     public void insertNode(int data) {
+        log("insert: " + data);
         Node current = root;
         Node parent = null;
 
@@ -75,6 +80,7 @@ public class RBtree {
     }
 
     public void deleteNode(int data) {
+        log("delete: " + data);
         Node node = root;
 
         if (node == null) {
@@ -133,7 +139,7 @@ public class RBtree {
         }
 
         Node grandparent = parent.parent;
-
+        log("insertFixup");
         // Case 2
         if (grandparent == null) {
             parent.color = BLACK;
@@ -180,6 +186,7 @@ public class RBtree {
         if (node == root)
             return;
 
+        log("deleteFixup");
         Node sibling = getSibling(node);
 
         // Case 2
@@ -208,6 +215,7 @@ public class RBtree {
     // Helper methods
 
     private void rotateRight(Node node) {
+        log("rotateRight");
         Node parent = node.parent;
         Node leftChild = node.left;
 
@@ -223,6 +231,7 @@ public class RBtree {
     }
 
     private void rotateLeft(Node node) {
+        log("rotateLeft");
         Node parent = node.parent;
         Node rightChild = node.right;
 

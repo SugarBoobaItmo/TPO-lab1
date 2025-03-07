@@ -5,12 +5,23 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RBtreeTest {
     private RBtree tree;
+    private List<String> callLog;
 
     @BeforeEach
     void setup() {
-        tree = new RBtree();
+        // tree = new RBtree();
+        tree = new RBtree() {
+            @Override
+            protected void log(String message) {
+                callLog.add(message);
+            }
+        };
+        callLog = new ArrayList<>();
     }
 
     @Test
@@ -55,7 +66,7 @@ public class RBtreeTest {
         tree.insertNode(5);
         tree.insertNode(15);
         tree.insertNode(1);
-        
+
         RBtree.Node node5 = tree.searchNode(5);
         RBtree.Node node15 = tree.searchNode(15);
         assertFalse(node5.color, "Node with data 5 should be black after recoloring");
@@ -67,7 +78,7 @@ public class RBtreeTest {
     void testInsertWithRotation() {
         tree.insertNode(10);
         tree.insertNode(5);
-        tree.insertNode(1); 
+        tree.insertNode(1);
 
         RBtree.Node root = tree.searchNode(5);
         assertEquals(5, root.data, "Root should be 5 after right rotation");
@@ -110,18 +121,43 @@ public class RBtreeTest {
         tree.insertNode(12);
         tree.insertNode(17);
 
-        tree.deleteNode(10); 
+        tree.deleteNode(10);
 
         RBtree.Node newRoot = tree.searchNode(12);
         assertNotNull(newRoot, "Root should be 12 or 15");
     }
 
-
     @Test
     @DisplayName("Test duplicate insertion")
     void testDuplicateInsertion() {
         tree.insertNode(10);
-        assertThrows(IllegalArgumentException.class, () -> tree.insertNode(10), "Tree already contains a node with data 10");
+        assertThrows(IllegalArgumentException.class, () -> tree.insertNode(10),
+                "Tree already contains a node with data 10");
     }
 
+    @Test
+    @DisplayName("Test sequence")
+    void testSequence() {
+        tree.insertNode(10);
+        tree.insertNode(20);
+        tree.insertNode(30);
+        tree.insertNode(40);
+        tree.deleteNode(10);
+
+        List<String> expectedSequence = List.of(
+                "insert: 10",
+                "insert: 20",
+                "insert: 30",
+                "insertFixup",
+                "rotateLeft",
+                "insert: 40",
+                "insertFixup",
+                "delete: 10",
+                "deleteFixup",
+                "rotateLeft"
+
+        );
+
+        assertEquals(expectedSequence, callLog);
+    }
 }

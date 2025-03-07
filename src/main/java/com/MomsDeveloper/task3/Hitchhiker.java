@@ -33,17 +33,23 @@ public class Hitchhiker extends Human {
 
     public int hitchhikerScore() {
         int score = 0;
-        if (isFrokt) score += 3;
-        if (isHipel) score += 2;
-        if (hasTowel) score += 5;
+        if (isFrokt)
+            score += 3;
+        if (isHipel)
+            score += 2;
+        if (hasTowel)
+            score += 5;
         score += characteristics.size();
         return score;
     }
 
     public String catchPhrase() {
-        if (hasTowel) return name + " всегда при полотенце. Don't Panic!";
-        if (isHipel) return name + " – это тот еще хипель!";
-        if (isFrokt) return name + " – реально солидно упакован.";
+        if (hasTowel)
+            return name + " всегда при полотенце. Don't Panic!";
+        if (isHipel)
+            return name + " – это тот еще хипель!";
+        if (isFrokt)
+            return name + " – реально солидно упакован.";
         return name + " пока что просто странник.";
     }
 
@@ -51,6 +57,5 @@ public class Hitchhiker extends Human {
     public String toString() {
         return super.toString() + (hasTowel ? ", всегда при полотенце" : "");
     }
-
 
 }
