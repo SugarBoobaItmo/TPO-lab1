@@ -62,6 +62,11 @@ public class OverallTest {
         int expectedScore = 3 + 2 + 5 + 2; // 3 (Frokt) + 2 (Hipel) + 5 (Towel) + 2 (Characteristics count)
 
         assertEquals(expectedScore, ford.hitchhikerScore());
+        
+        Hitchhiker bob = new Hitchhiker("Боба", Set.of(), false);
+        int expectedZeroScore = 0;
+
+        assertEquals(expectedZeroScore, bob.hitchhikerScore());
     }
 
     @Test
@@ -85,7 +90,13 @@ public class OverallTest {
     @Test
     void testToStringOutput() {
         Hitchhiker ford = new Hitchhiker("Форд", Set.of(Characteristics.PACKED, Characteristics.COOL), true);
-        assertTrue(ford.toString().contains("Форд"), "ToString should include the name.");
-        assertTrue(ford.toString().contains("при полотенце"), "ToString should mention the towel if present.");
+        assertAll("Hitchhiker toString values",
+                () -> assertTrue(ford.toString().contains("Форд"), "ToString should include the name."),
+                () -> assertTrue(ford.toString().contains("при полотенце"),
+                        "ToString should mention the towel if present."),
+                () -> assertTrue(ford.toString().contains("Реальный"),
+                        "ToString should include in characteristics COOL description."),
+                () -> assertTrue(ford.toString().contains("Упакованный"),
+                        "ToString should include in characteristics PACKED description."));
     }
 }
